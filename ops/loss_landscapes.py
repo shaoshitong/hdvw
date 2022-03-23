@@ -16,7 +16,7 @@ def normalize_filter(bs, ws):
     for k in bs:
         ws_norm = torch.norm(ws[k], dim=0, keepdim=True)
         bs_norm = torch.norm(bs[k], dim=0, keepdim=True)
-        norm_bs[k] = ws_norm / (bs_norm + 1e-7) * bs[k]
+        norm_bs[k] = ws_norm / (bs_norm + 1e-7) * bs[k] # random * true_norm / rand_norm
 
     return norm_bs
 
@@ -54,7 +54,7 @@ def rand_basis(ws, gpu=True):
 def create_bases(model, kws=None, gpu=True):
     kws = [] if kws is None else kws
     ws0 = copy.deepcopy(model.state_dict())
-    bases = [rand_basis(ws0, gpu) for _ in range(2)]  # Use two bases
+    bases = [rand_basis(ws0, gpu) for _ in range(2)]  # Use two bases # two dict
     bases = [normalize_filter(bs, ws0) for bs in bases]
     bases = [ignore_bn(bs) for bs in bases]
     bases = [ignore_kw(bs, kws) for bs in bases]
@@ -78,7 +78,7 @@ def get_loss_landscape(model, n_ff, dataset, transform=None,
     metrics_grid = {}
     for ratio in ratio_grid.reshape([-1, 2]):
         ws = copy.deepcopy(ws0)
-        gs = [{k: r * bs[k] for k in bs} for r, bs in zip(ratio, bases)]
+        gs = [{k: r * bs[k] for k in bs} for r, bs in zip(ratio, bases)] # two dict
         gs = {k: torch.sum(torch.stack([g[k] for g in gs]), dim=0) + ws[k] for k in gs[0]}
         model.load_state_dict(gs)
 

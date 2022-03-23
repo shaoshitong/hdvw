@@ -1,7 +1,7 @@
 ---
 dataset:
   name: cifar100
-  root: "../data"
+  root: "/home/qiuziming/data/"
   mean:
   - 0.5071
   - 0.4867
