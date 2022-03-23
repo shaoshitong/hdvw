@@ -3,24 +3,22 @@ import time
 import requests
 from pathlib import Path
 from tqdm import tqdm
-
 import torch
 import torch.nn as nn
-import models.layers as layers
-import models.alexnet as alexnet
-import models.vggnet as vgg
-import models.prevggnet as prevgg
-import models.resnet as resnet
-import models.preresnet as preresnet
-import models.resnext as resnext
-import models.wideresnet as wideresnet
-import models.seresnet as seresnet
-import models.cbamresnet as cbamresnet
-import models.vit as vit
-import models.pit as pit
-import models.mixer as mixer
-
-import ops.meters as meters
+import hdvw.models.layers as layers
+import hdvw.models.alexnet as alexnet
+import hdvw.models.vggnet as vgg
+import hdvw.models.prevggnet as prevgg
+import hdvw.models.resnet as resnet
+import hdvw.models.preresnet as preresnet
+import hdvw.models.resnext as resnext
+import hdvw.models.wideresnet as wideresnet
+import hdvw.models.seresnet as seresnet
+import hdvw.models.cbamresnet as cbamresnet
+import hdvw.models.vit as vit
+import hdvw.models.pit as pit
+import hdvw.models.mixer as mixer
+import hdvw.ops.meters as meters
 
 
 def get_model(name, num_classes=10, stem=False, verbose=True, **block_kwargs):

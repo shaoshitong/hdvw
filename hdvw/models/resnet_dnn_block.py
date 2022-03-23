@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-import models.layers as layers
+import hdvw.models.layers as layers
 
 
 class BasicBlock(nn.Module):

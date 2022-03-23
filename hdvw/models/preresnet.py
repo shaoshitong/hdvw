@@ -1,11 +1,11 @@
 import torch
 import torch.nn as nn
-import models.layers as layers
-import models.resnet as resnet
-import models.preresnet_dnn_block as preresnet_dnn
-import models.preresnet_mcdo_block as preresnet_mcdo
-import models.smoothing_block as smoothing
-import models.classifier_block as classifier
+import hdvw.models.layers as layers
+import hdvw.models.resnet as resnet
+import hdvw.models.preresnet_dnn_block as preresnet_dnn
+import hdvw.models.preresnet_mcdo_block as preresnet_mcdo
+import hdvw.models.smoothing_block as smoothing
+import hdvw.models.classifier_block as classifier
 
 
 class PreResNet(resnet.ResNet):

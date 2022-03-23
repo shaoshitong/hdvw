@@ -8,7 +8,7 @@ import torchvision.transforms as transforms
 from torchvision.datasets.vision import VisionDataset
 from torchvision.datasets.utils import check_integrity, download_and_extract_archive
 
-import ops.datasets as datasets
+import hdvw.ops.datasets as datasets
 
 
 class ToTensor:

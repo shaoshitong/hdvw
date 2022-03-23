@@ -1,7 +1,6 @@
-import models.resnet as resnet
-import models.resnet_dnn_block as resnet_dnn
-import models.resnet_mcdo_block as resnet_mcdo
-import models.smoothing_block as smoothing
+import hdvw.models.resnet as resnet
+import hdvw.models.resnet_dnn_block as resnet_dnn
+import hdvw.models.resnet_mcdo_block as resnet_mcdo
 
 
 # Deterministic

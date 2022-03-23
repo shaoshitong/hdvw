@@ -4,8 +4,8 @@ import re
 import numpy as np
 import torch
 
-import ops.norm as norm
-import ops.tests as tests
+import hdvw.ops.norm as norm
+import hdvw.ops.tests as tests
 
 
 def normalize_filter(bs, ws):

@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
-import models.classifier_block as classifier
-import models.smoothing_block as smoothing
-import models.vggnet_dnn_block as vggnet_dnn
-import models.vggnet_mcdo_block as vggnet_mcdo
+import hdvw.models.classifier_block as classifier
+import hdvw.models.smoothing_block as smoothing
+import hdvw.models.vggnet_dnn_block as vggnet_dnn
+import hdvw.models.vggnet_mcdo_block as vggnet_mcdo
 
 
 class VGGNet(nn.Module):

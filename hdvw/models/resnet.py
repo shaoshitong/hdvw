@@ -1,10 +1,10 @@
 import torch
 import torch.nn as nn
-import models.layers as layers
-import models.resnet_dnn_block as resnet_dnn
-import models.resnet_mcdo_block as resnet_mcdo
-import models.smoothing_block as smoothing
-import models.classifier_block as classifier
+import hdvw.models.layers as layers
+import hdvw.models.resnet_dnn_block as resnet_dnn
+import hdvw.models.resnet_mcdo_block as resnet_mcdo
+import hdvw.models.smoothing_block as smoothing
+import hdvw.models.classifier_block as classifier
 
 
 class ResNet(nn.Module):

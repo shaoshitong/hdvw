@@ -1,6 +1,6 @@
-import models.resnet as resnet
-import models.seresnet_dnn_block as resnet_dnn
-import models.seresnet_mcdo_block as resnet_mcdo
+import hdvw.models.resnet as resnet
+import hdvw.models.seresnet_dnn_block as resnet_dnn
+import hdvw.models.seresnet_mcdo_block as resnet_mcdo
 
 
 # Deterministic

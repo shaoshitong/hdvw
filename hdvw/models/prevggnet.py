@@ -1,10 +1,8 @@
 import torch
 import torch.nn as nn
-import models.vggnet as vgg
-import models.classifier_block as classifier
-import models.smoothing_block as smoothing
-import models.prevggnet_dnn_block as prevggnet_dnn
-import models.prevggnet_mcdo_block as prevggnet_mcdo
+import hdvw.models.vggnet as vgg
+import hdvw.models.prevggnet_dnn_block as prevggnet_dnn
+import hdvw.models.prevggnet_mcdo_block as prevggnet_mcdo
 
 
 # Deterministic

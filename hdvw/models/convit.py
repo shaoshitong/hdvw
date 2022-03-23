@@ -11,9 +11,9 @@ from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
 from torch import nn, einsum
 
-import models.layers as layers
-from models.attentions import Transformer
-from models.embeddings import AbsPosEmbedding
+import hdvw.models.layers as layers
+from hdvw.models.attentions import Transformer
+from hdvw.models.embeddings import AbsPosEmbedding
 
 
 class ConvAttention2d(nn.Module):

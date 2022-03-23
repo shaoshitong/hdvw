@@ -35,8 +35,9 @@ setup(
     ],
     # Note that this is a string of words separated by whitespace, not a list.
     keywords='pytorch models efficientnet mobilenetv3 mnasnet',
-    packages=['hdvw'],
+    packages=find_packages(exclude=['checkpoints','configs','models','ops','resources']),
     package_dir={'hdvw':'hdvw'},
     install_requires=['torch >= 1.4', 'torchvision'],
+    include_package_data=True,
     python_requires='>=3.6',
 )

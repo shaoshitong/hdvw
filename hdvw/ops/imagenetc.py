@@ -8,7 +8,7 @@ from torchvision.datasets.utils import check_integrity, download_and_extract_arc
 import torchvision.transforms as transforms
 import torchvision.datasets as tdatasets
 
-import ops.datasets as datasets
+import hdvw.ops.datasets as datasets
 
 
 class ImageNetC(tdatasets.ImageFolder):

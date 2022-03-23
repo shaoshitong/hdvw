@@ -7,9 +7,9 @@ from functools import partial
 
 from einops.layers.torch import Reduce
 
-from models.embeddings import PatchEmbedding
-from models.attentions import FeedForward
-from models.layers import DropPath
+from hdvw.models.embeddings import PatchEmbedding
+from hdvw.models.attentions import FeedForward
+from hdvw.models.layers import DropPath
 
 
 class MixerBlock(nn.Module):

@@ -8,9 +8,9 @@ from torch import nn
 
 from einops import rearrange
 
-from models.layers import Lambda
-from models.embeddings import ConvEmbedding, CLSToken, AbsPosEmbedding
-from models.attentions import Transformer
+from hdvw.models.layers import Lambda
+from hdvw.models.embeddings import ConvEmbedding, CLSToken, AbsPosEmbedding
+from hdvw.models.attentions import Transformer
 
 
 class DepthwiseConv2d(nn.Module):

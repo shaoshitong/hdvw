@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
-import models.alexnet_dnn_block as alexnet_dnn
-import models.alexnet_mcdo_block as alexnet_mcdo
-import models.smoothing_block as smoothing
-import models.classifier_block as classifier
+import hdvw.models.alexnet_dnn_block as alexnet_dnn
+import hdvw.models.alexnet_mcdo_block as alexnet_mcdo
+import hdvw.models.smoothing_block as smoothing
+import hdvw.models.classifier_block as classifier
 
 
 class AlexNet(nn.Module):

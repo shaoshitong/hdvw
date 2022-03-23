@@ -1,2 +1,2 @@
-from .adversarial import *
-from .arithmetic import *
+from hdvw.ops.adversarial import *
+from hdvw.ops.arithmetic import *

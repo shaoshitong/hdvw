@@ -4,9 +4,9 @@ This model is based on the implementation of https://github.com/lucidrains/vit-p
 import torch
 from torch import nn
 
-from models.layers import Lambda
-from models.embeddings import PatchEmbedding, CLSToken, AbsPosEmbedding
-from models.attentions import Transformer
+from hdvw.models.layers import Lambda
+from hdvw.models.embeddings import PatchEmbedding, CLSToken, AbsPosEmbedding
+from hdvw.models.attentions import Transformer
 
 
 class ViT(nn.Module):

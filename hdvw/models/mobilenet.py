@@ -1,8 +1,8 @@
 import math
 import torch.nn as nn
 
-import models.layers as layers
-import models.classifier_block as classifier
+import hdvw.models.layers as layers
+import hdvw.models.classifier_block as classifier
 
 
 class Basic(nn.Module):

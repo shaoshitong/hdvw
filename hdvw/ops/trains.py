@@ -14,11 +14,11 @@ import torchvision
 from timm.loss import SoftTargetCrossEntropy, LabelSmoothingCrossEntropy
 from timm.data import Mixup
 
-import ops.tests as tests
-import ops.meters as meters
-import ops.norm as norm
+import hdvw.ops.tests as tests
+import hdvw.ops.meters as meters
+import hdvw.ops.norm as norm
 
-import models
+import hdvw.models as models
 
 
 def get_optimizer(model, name, **kwargs):

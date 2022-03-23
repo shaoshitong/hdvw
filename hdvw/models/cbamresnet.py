@@ -1,6 +1,6 @@
-import models.resnet as resnet
-import models.cbamresnet_dnn_block as resnet_dnn
-import models.cbamresnet_mcdo_block as resnet_mcdo
+import hdvw.models.resnet as resnet
+import hdvw.models.cbamresnet_dnn_block as resnet_dnn
+import hdvw.models.cbamresnet_mcdo_block as resnet_mcdo
 
 
 # Deterministic

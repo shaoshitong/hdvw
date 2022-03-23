@@ -8,7 +8,7 @@ import torch.nn as nn
 
 from einops import reduce, rearrange
 
-import models.layers as layers
+import hdvw.models.layers as layers
 
 
 class ChannelGate(nn.Module):

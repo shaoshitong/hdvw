@@ -6,8 +6,8 @@ import torch
 from torch import nn, einsum
 from einops import rearrange, repeat
 
-from models.layers import ln2d
-from models.attentions import Attention1d, Transformer
+from hdvw.models.layers import ln2d
+from hdvw.models.attentions import Attention1d, Transformer
 
 
 class CyclicShift(nn.Module):

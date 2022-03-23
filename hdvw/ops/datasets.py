@@ -8,9 +8,9 @@ import torchvision.datasets as datasets
 
 import timm.data.transforms_factory as tff
 
-import ops.cifarc as cifarc
-import ops.cifarp as cifarp
-import ops.imagenetc as imagenetc
+import hdvw.ops.cifarc as cifarc
+import hdvw.ops.cifarp as cifarp
+import hdvw.ops.imagenetc as imagenetc
 
 
 def get_dataset(name, root="./data", download=False, **kwargs):
