@@ -6,7 +6,7 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 setup(
     name='hdvw',
     version=__version__,

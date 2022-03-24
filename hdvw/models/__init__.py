@@ -19,6 +19,7 @@ import hdvw.models.vit as vit
 import hdvw.models.pit as pit
 import hdvw.models.mixer as mixer
 import hdvw.ops.meters as meters
+import hdvw.models.convnext as convnext
 
 
 def get_model(name, num_classes=10, stem=False, verbose=True, **block_kwargs):
@@ -326,6 +327,12 @@ def get_model(name, num_classes=10, stem=False, verbose=True, **block_kwargs):
         model = mixer.large(num_classes=num_classes, name=name, **block_kwargs)
     elif name in ["mixer_h"]:
         model = mixer.huge(num_classes=num_classes, name=name, **block_kwargs)
+    elif name in ["convnext_base"]:
+        model=convnext.convnext_base_in22k(num_classes=num_classes,pretrained=False)
+    elif name in ["convnext_tiny"]:
+        model=convnext.convnext_tiny(num_classes=num_classes,pretrained=False)
+    elif name in ["convnext_large"]:
+        model=convnext.convnext_large(num_classes=num_classes,pretrained=False)
     else:
         raise NotImplementedError
 
@@ -360,7 +367,6 @@ def save_snapshot(model, dataset_name, uid, typ, optimizer=None, root="models_ch
 
 def _save(model, save_path, optimizer=None):
     save_obj = {
-        "name": model.name,
         "state_dict": model.state_dict() if type(model) is not nn.DataParallel else model.module.state_dict(),
     }
     if optimizer is not None:
