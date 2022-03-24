@@ -348,7 +348,7 @@ def get_model(name, num_classes=10, stem=False, verbose=True, **block_kwargs):
 
 
 def save(model, dataset_name, uid, optimizer=None, root="models_checkpoints"):
-    if model.name is not None:
+    if hasattr(model,"name"):
         checkpoint_path = os.path.join(root, dataset_name, model.name)
         fname = "%s_%s_%s.pth.tar" % (dataset_name, model.name, uid)
     else:
@@ -361,7 +361,7 @@ def save(model, dataset_name, uid, optimizer=None, root="models_checkpoints"):
 
 
 def save_snapshot(model, dataset_name, uid, typ, optimizer=None, root="models_checkpoints"):
-    if model.name is not None:
+    if hasattr(model,"name"):
         snapshot_path = os.path.join(root, dataset_name, model.name, "%s_%s_%s" % (dataset_name, model.name, uid))
         fname = "%s_%s_%s_%%s.pth.tar" % (dataset_name, model.name, uid)
     else:
@@ -383,7 +383,7 @@ def _save(model, save_path, optimizer=None):
 
 
 def load(model, dataset_name, uid, optimizer=None, root="models_checkpoints"):
-    if model.name is not None:
+    if hasattr(model,"name"):
         checkpoint_path = os.path.join(root, dataset_name, model.name)
         save_path = os.path.join(checkpoint_path, "%s_%s_%s.pth.tar" % (dataset_name, model.name, uid))
     else:
@@ -393,7 +393,7 @@ def load(model, dataset_name, uid, optimizer=None, root="models_checkpoints"):
 
 
 def load_snapshot(model, dataset_name, uid, typ, optimizer=None, root="models_checkpoints", ):
-    if model.name is not None:
+    if hasattr(model,"name"):
         snapshot_path = os.path.join(root, dataset_name, model.name, "%s_%s_%s" % (dataset_name, model.name, uid))
         fname = "%s_%s_%s_%%s.pth.tar" % (dataset_name, model.name, uid)
     else:
@@ -412,7 +412,7 @@ def _load(model, save_path, optimizer=None):
 
 
 def stats(model, xs=None):
-    if model.name is not None:
+    if hasattr(model,"name"):
         stat_str = "model: %s , params: %.1fM" % (model.name, count_parameters(model) / 1e6)
     else:
         stat_str = " params: %.1fM" % ( count_parameters(model) / 1e6)
