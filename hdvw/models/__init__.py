@@ -365,7 +365,7 @@ def save_snapshot(model, dataset_name, uid, typ, optimizer=None, root="models_ch
         snapshot_path = os.path.join(root, dataset_name, model.name, "%s_%s_%s" % (dataset_name, model.name, uid))
         fname = "%s_%s_%s_%%s.pth.tar" % (dataset_name, model.name, uid)
     else:
-        snapshot_path = os.path.join(root, dataset_name, "%s_%s_%s" % (dataset_name, model.name, uid))
+        snapshot_path = os.path.join(root, dataset_name, "%s_%s" % (dataset_name, uid))
         fname = "%s_%s_%%s.pth.tar" % (dataset_name, uid)
     save_path = os.path.join(snapshot_path, fname)
 
