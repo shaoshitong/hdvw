@@ -348,8 +348,12 @@ def get_model(name, num_classes=10, stem=False, verbose=True, **block_kwargs):
 
 
 def save(model, dataset_name, uid, optimizer=None, root="models_checkpoints"):
-    checkpoint_path = os.path.join(root, dataset_name, model.name)
-    fname = "%s_%s_%s.pth.tar" % (dataset_name, model.name, uid)
+    if model.name is not None:
+        checkpoint_path = os.path.join(root, dataset_name, model.name)
+        fname = "%s_%s_%s.pth.tar" % (dataset_name, model.name, uid)
+    else:
+        checkpoint_path = os.path.join(root, dataset_name)
+        fname = "%s_%s.pth.tar" % (dataset_name, uid)
     save_path = os.path.join(checkpoint_path, fname)
 
     Path(checkpoint_path).mkdir(parents=True, exist_ok=True)
@@ -357,8 +361,12 @@ def save(model, dataset_name, uid, optimizer=None, root="models_checkpoints"):
 
 
 def save_snapshot(model, dataset_name, uid, typ, optimizer=None, root="models_checkpoints"):
-    snapshot_path = os.path.join(root, dataset_name, model.name, "%s_%s_%s" % (dataset_name, model.name, uid))
-    fname = "%s_%s_%s_%%s.pth.tar" % (dataset_name, model.name, uid)
+    if model.name is not None:
+        snapshot_path = os.path.join(root, dataset_name, model.name, "%s_%s_%s" % (dataset_name, model.name, uid))
+        fname = "%s_%s_%s_%%s.pth.tar" % (dataset_name, model.name, uid)
+    else:
+        snapshot_path = os.path.join(root, dataset_name, "%s_%s_%s" % (dataset_name, model.name, uid))
+        fname = "%s_%s_%%s.pth.tar" % (dataset_name, uid)
     save_path = os.path.join(snapshot_path, fname)
 
     Path(snapshot_path).mkdir(parents=True, exist_ok=True)
@@ -375,14 +383,22 @@ def _save(model, save_path, optimizer=None):
 
 
 def load(model, dataset_name, uid, optimizer=None, root="models_checkpoints"):
-    checkpoint_path = os.path.join(root, dataset_name, model.name)
-    save_path = os.path.join(checkpoint_path, "%s_%s_%s.pth.tar" % (dataset_name, model.name, uid))
+    if model.name is not None:
+        checkpoint_path = os.path.join(root, dataset_name, model.name)
+        save_path = os.path.join(checkpoint_path, "%s_%s_%s.pth.tar" % (dataset_name, model.name, uid))
+    else:
+        checkpoint_path = os.path.join(root, dataset_name)
+        save_path = os.path.join(checkpoint_path, "%s_%s.pth.tar" % (dataset_name, uid))
     _load(model, save_path, optimizer)
 
 
 def load_snapshot(model, dataset_name, uid, typ, optimizer=None, root="models_checkpoints", ):
-    snapshot_path = os.path.join(root, dataset_name, model.name, "%s_%s_%s" % (dataset_name, model.name, uid))
-    fname = "%s_%s_%s_%%s.pth.tar" % (dataset_name, model.name, uid)
+    if model.name is not None:
+        snapshot_path = os.path.join(root, dataset_name, model.name, "%s_%s_%s" % (dataset_name, model.name, uid))
+        fname = "%s_%s_%s_%%s.pth.tar" % (dataset_name, model.name, uid)
+    else:
+        snapshot_path = os.path.join(root, dataset_name, "%s_%s" % (dataset_name, uid))
+        fname = "%s_%s_%%s.pth.tar" % (dataset_name, uid)
     save_path = os.path.join(snapshot_path, fname)
 
     _load(model, save_path % typ, optimizer)
@@ -396,7 +412,10 @@ def _load(model, save_path, optimizer=None):
 
 
 def stats(model, xs=None):
-    stat_str = "model: %s , params: %.1fM" % (model.name, count_parameters(model) / 1e6)
+    if model.name is not None:
+        stat_str = "model: %s , params: %.1fM" % (model.name, count_parameters(model) / 1e6)
+    else:
+        stat_str = " params: %.1fM" % ( count_parameters(model) / 1e6)
     if xs is not None:
         model.eval()
         ys = model(xs)
