@@ -5,41 +5,36 @@ import os
 from omegaconf import OmegaConf as yaml
 import copy
 from pathlib import Path
-
+from lib.data_loaders import load_data_tinyimagenet
 import torch
 from torch.utils.data import DataLoader
-
-import models
-import ops.tests as tests
-import ops.datasets as datasets
-import ops.loss_landscapes as lls
-# config_path = "%s/configs/cifar10_vit.yaml" % root
-config_path = "%s/configs/cifar100_vit.yaml" % root
-# config_path = "%s/configs/imagenet_vit.yaml" % root
-
+from model.Two_D_SNet import Two_D_SNet
+import hdvw.ops.tests as tests
+from hdvw.models import load_snapshot
+import hdvw.ops.loss_landscapes as lls
+config_path = './config/train_tinyimagenet.yaml'
 with open(config_path) as f:
     args = yaml.load(f)
     print(args)
-dataset_args = copy.deepcopy(args).get("dataset")
-train_args = copy.deepcopy(args).get("train")
-val_args = copy.deepcopy(args).get("val")
-model_args = copy.deepcopy(args).get("model")
-optim_args = copy.deepcopy(args).get("optim")
-env_args = copy.deepcopy(args).get("env")
-
-import torch.nn as nn
-dataset_train, dataset_test = datasets.get_dataset(**dataset_args, download=True)
-dataset_name = dataset_args["name"]
-num_classes = len(dataset_train.classes)
-
-dataset_train = DataLoader(dataset_train,
-                           shuffle=True,
-                           num_workers=train_args.get("num_workers", 4),
-                           batch_size=train_args.get("batch_size", 128))
-dataset_test = DataLoader(dataset_test,
-                          num_workers=val_args.get("num_workers", 4),
-                          batch_size=val_args.get("batch_size", 128))
-
+dataset_train, dataset_test= load_data_tinyimagenet(args['parameters']['batch_size'],
+                                                           args['parameters']['batch_size'], args['data_url'])
+model = Two_D_SNet(
+    sample_data=torch.randn(args['parameters']['batch_size'], 3, 64, 64),
+    dataoption="tinyimagenet",
+    num_classes=args["num_classes"],
+    decay_rate=args["decay_rate"],
+    down_rate=args["down_rate"],
+    dropout=args["parameters"]["dropout"],
+    Tem=args["Tem"],
+    channel_list=args["channel_list"],
+    size_list=args["size_list"],
+    bn_size_list=args["bn_size_list"],
+    path_nums_list=args["path_nums_list"],
+    nums_head_list=args["nums_head_list"],
+    nums_layer_list=args["nums_layer_list"],
+    breadth_threshold_list=args["breadth_threshold_list"],
+    att_type_list=args["att_type_list"])
+num_classes = args["num_classes"]
 print("Train: %s, Test: %s, Classes: %s" % (
     len(dataset_train.dataset),
     len(dataset_test.dataset),
@@ -60,38 +55,16 @@ def mixup_function(train_args):
     return mixup_function
 
 
-transform = mixup_function(train_args)
-# download and load a pretrained model for CIFAR-100
-url = "https://github.com/xxxnell/how-do-vits-work-storage/releases/download/v0.1/resnet_50_cifar100_691cc9a9e4.pth.tar"
-path = "checkpoints/resnet_50_cifar100_691cc9a9e4.pth.tar"
-models.download(url=url, path=path)
+transform = mixup_function({"smoothing":0.1})
 
-name = "resnet_50"
-model = models.get_model(name, num_classes=num_classes,  # timm does not provide a ResNet for CIFAR
-                         stem=model_args.get("stem", False))
 map_location = "cuda" if torch.cuda.is_available() else "cpu"
-checkpoint = torch.load(path, map_location=map_location)
+checkpoint = torch.load("D:\\Product\\checkpoint\\tinyimagenet\\tinyimagenet_199\\tinyimagenet_199_2dsnet_5_6_7.pth.tar", map_location=map_location)
 model.load_state_dict(checkpoint["state_dict"])
 
 import copy
 import timm
 import torch
 import torch.nn as nn
-
-# download and load a pretrained model for CIFAR-100
-url = "https://github.com/xxxnell/how-do-vits-work-storage/releases/download/v0.1/vit_ti_cifar100_9857b21357.pth.tar"
-path = "checkpoints/vit_ti_cifar100_9857b21357.pth.tar"
-models.download(url=url, path=path)
-
-model = timm.models.vision_transformer.VisionTransformer(
-    num_classes=num_classes, img_size=32, patch_size=2,  # for CIFAR
-    embed_dim=192, depth=12, num_heads=3, qkv_bias=False,  # for ViT-Ti
-)
-model.name = "vit_ti"
-models.stats(model)
-map_location = "cuda" if torch.cuda.is_available() else "cpu"
-checkpoint = torch.load(path, map_location=map_location)
-model.load_state_dict(checkpoint["state_dict"])
 
 scale = 1e-0
 n = 21
@@ -103,9 +76,9 @@ metrics_grid = lls.get_loss_landscape(
     x_min=-1.0 * scale, x_max=1.0 * scale, n_x=n, y_min=-1.0 * scale, y_max=1.0 * scale, n_y=n, gpu=gpu,
 )
 uid=1
-leaderboard_path = os.path.join("leaderboard", "logs", dataset_name, model.name)
+leaderboard_path = os.path.join("leaderboard", "logs", 'cifar10', '2dsnet218')
 Path(leaderboard_path).mkdir(parents=True, exist_ok=True)
-metrics_dir = os.path.join(leaderboard_path, "%s_%s_%s_x%s_losslandscape.csv" % (dataset_name, model.name, uid, int(1 / scale)))
+metrics_dir = os.path.join(leaderboard_path, "%s_%s_%s_x%s_losslandscape.csv" % ('cifar10', model.name, uid, int(1 / scale)))
 metrics_list = [[*grid, *metrics] for grid, metrics in metrics_grid.items()]
 tests.save_metrics(metrics_dir, metrics_list)
 import math
@@ -118,7 +91,7 @@ names = ["x", "y", "l1", "l2", "NLL", "Cutoff1", "Cutoff2", "Acc", "Acc-90", "Un
 # path = "%s/resources/results/cifar100_resnet_dnn_50_losslandscape.csv" % root  # for ResNet-50
 path = "%s/resources/results/cifar100_vit_ti_losslandscape.csv" % root  # for ViT-Ti
 data = pd.read_csv(path, names=names)
-data["loss"] = data["NLL"] + optim_args["weight_decay"] * data["l2"]  # NLL + l2
+data["loss"] = data["NLL"] + args['optimizer'][args['optimizer']['optimizer_choice']]["weight_decay"] * data["l2"]  # NLL + l2
 
 # prepare data
 p = int(math.sqrt(len(data)))
