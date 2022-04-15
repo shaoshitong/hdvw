@@ -6,7 +6,7 @@ python setup.py build
 python setup.py install
 ```
 
-# how to use ?
+# how to use loss landscape visualization?
 
 **draw loss landscape visualization**
 
@@ -166,5 +166,14 @@ plt.show()
 lastly, we get the loss landscape:
 
 ![png](./resource/losslandscape.png)
+
+# how to use confusion matrix?
+```python
+from hdvw.ops.confusion_matrix import confusion_matrix_pyplot
+data,labels=test_dataset.data,test_dataset.labels
+y_pred=model(data)
+y_true=labels
+confusion_matrix_pyplot(y_true,y_pred,name="./example.png")
+```
 
 ## The code is copied form ![how-do-vits-work](https://github.com/xxxnell/how-do-vits-work), thanks!
