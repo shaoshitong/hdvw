@@ -166,3 +166,5 @@ plt.show()
 lastly, we get the loss landscape:
 
 ![png](./resource/losslandscape.png)
+
+## The code is copied form ![how-do-vits-work](https://github.com/xxxnell/how-do-vits-work), thanks!
