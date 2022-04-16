@@ -19,10 +19,8 @@ import os
 from omegaconf import OmegaConf as yaml
 import copy
 from pathlib import Path
-from lib.data_loaders import load_data_tinyimagenet
 import torch
 from torch.utils.data import DataLoader
-from model.Two_D_SNet import Two_D_SNet
 import hdvw.ops.tests as tests
 from hdvw.models import load_snapshot
 import hdvw.ops.loss_landscapes as lls
@@ -176,4 +174,4 @@ y_true=labels
 confusion_matrix_pyplot(y_true,y_pred,name="./example.png")
 ```
 
-## The code is copied form ![how-do-vits-work](https://github.com/xxxnell/how-do-vits-work), thanks!
+## The code is copied form [how-do-vits-work](https://github.com/xxxnell/how-do-vits-work), thanks!

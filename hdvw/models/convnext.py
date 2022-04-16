@@ -12,6 +12,7 @@ from timm.models.layers import trunc_normal_, ClassifierHead, SelectAdaptivePool
 from timm.models.registry import register_model
 
 __all__ = ['ConvNeXt']  # model_registry will add each entrypoint fn to this
+
 import collections.abc
 import logging
 import math
@@ -26,6 +27,8 @@ import torch
 import torch.nn as nn
 from torch.hub import load_state_dict_from_url
 from torch.utils.checkpoint import checkpoint
+
+
 def checkpoint_seq(
         functions,
         x,
@@ -63,11 +66,13 @@ def checkpoint_seq(
         >>> model = nn.Sequential(...)
         >>> input_var = checkpoint_seq(model, input_var, every=2)
     """
+
     def run_function(start, end, functions):
         def forward(_x):
             for j in range(start, end + 1):
                 _x = functions[j](_x)
             return _x
+
         return forward
 
     if isinstance(functions, torch.nn.Sequential):
@@ -87,6 +92,7 @@ def checkpoint_seq(
     if skip_last:
         return run_function(end + 1, len(functions) - 1, functions)(x)
     return x
+
 
 def _cfg(url='', **kwargs):
     return {
@@ -411,113 +417,56 @@ def _create_convnext(variant, pretrained=False, **kwargs):
 
 
 @register_model
-def convnext_nano_hnf(pretrained=False, **kwargs):
-    model_args = dict(depths=(2, 2, 8, 2), dims=(80, 160, 320, 640), head_norm_first=True, conv_mlp=True, **kwargs)
-    model = _create_convnext('convnext_nano_hnf', pretrained=pretrained, **model_args)
+def convnext_tiny(pretrained=False, num_classes=1000, **kwargs):
+    model_args = dict(depths=(3, 3, 9, 3), dims=(96, 192, 384, 768), num_classes=num_classes,
+                      default_cfgs={'architecture': 'convnext_tiny'}, **kwargs)
+    model = _create_convnext('convnext_tiny', pretrained=pretrained, num_classes=num_classes, **model_args)
     return model
 
 
 @register_model
-def convnext_tiny_hnf(pretrained=False, **kwargs):
-    model_args = dict(depths=(3, 3, 9, 3), dims=(96, 192, 384, 768), head_norm_first=True, conv_mlp=True, **kwargs)
-    model = _create_convnext('convnext_tiny_hnf', pretrained=pretrained, **model_args)
-    return model
-
-
-@register_model
-def convnext_tiny_hnfd(pretrained=False, **kwargs):
-    model_args = dict(
-        depths=(3, 3, 9, 3), dims=(96, 192, 384, 768), head_norm_first=True, conv_mlp=True, stem_type='dual', **kwargs)
-    model = _create_convnext('convnext_tiny_hnf', pretrained=pretrained, **model_args)
-    return model
-
-
-@register_model
-def convnext_tiny(pretrained=False, **kwargs):
-    model_args = dict(depths=(3, 3, 9, 3), dims=(96, 192, 384, 768), **kwargs)
-    model = _create_convnext('convnext_tiny', pretrained=pretrained, **model_args)
-    return model
-
-
-@register_model
-def convnext_small(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[96, 192, 384, 768], **kwargs)
+def convnext_small(pretrained=False, num_classes=1000, **kwargs):
+    model_args = dict(depths=[3, 3, 27, 3], dims=[96, 192, 384, 768], num_classes=num_classes,
+                      default_cfgs={'architecture': 'convnext_small'}, **kwargs)
     model = _create_convnext('convnext_small', pretrained=pretrained, **model_args)
     return model
 
 
 @register_model
-def convnext_base(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[128, 256, 512, 1024], **kwargs)
+def convnext_base(pretrained=False, num_classes=1000, **kwargs):
+    model_args = dict(depths=[3, 3, 27, 3], dims=[128, 256, 512, 1024], num_classes=num_classes,
+                      default_cfgs={'architecture': 'convnext_base'}, **kwargs)
     model = _create_convnext('convnext_base', pretrained=pretrained, **model_args)
     return model
 
 
 @register_model
-def convnext_large(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536], **kwargs)
+def convnext_large(pretrained=False, num_classes=1000, **kwargs):
+    model_args = dict(depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536], num_classes=num_classes,
+                      default_cfgs={'architecture': 'convnext_large'}, **kwargs)
     model = _create_convnext('convnext_large', pretrained=pretrained, **model_args)
     return model
 
 
 @register_model
-def convnext_base_in22ft1k(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[128, 256, 512, 1024], **kwargs)
-    model = _create_convnext('convnext_base_in22ft1k', pretrained=pretrained, **model_args)
-    return model
-
-
-@register_model
-def convnext_large_in22ft1k(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536], **kwargs)
-    model = _create_convnext('convnext_large_in22ft1k', pretrained=pretrained, **model_args)
-    return model
-
-
-@register_model
-def convnext_xlarge_in22ft1k(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[256, 512, 1024, 2048], **kwargs)
-    model = _create_convnext('convnext_xlarge_in22ft1k', pretrained=pretrained, **model_args)
-    return model
-
-
-@register_model
-def convnext_base_384_in22ft1k(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[128, 256, 512, 1024], **kwargs)
-    model = _create_convnext('convnext_base_384_in22ft1k', pretrained=pretrained, **model_args)
-    return model
-
-
-@register_model
-def convnext_large_384_in22ft1k(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536], **kwargs)
-    model = _create_convnext('convnext_large_384_in22ft1k', pretrained=pretrained, **model_args)
-    return model
-
-
-@register_model
-def convnext_xlarge_384_in22ft1k(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[256, 512, 1024, 2048], **kwargs)
-    model = _create_convnext('convnext_xlarge_384_in22ft1k', pretrained=pretrained, **model_args)
-    return model
-
-
-@register_model
-def convnext_base_in22k(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[128, 256, 512, 1024], **kwargs)
+def convnext_base_in22k(pretrained=False, num_classes=1000, **kwargs):
+    model_args = dict(depths=[3, 3, 27, 3], dims=[128, 256, 512, 1024], num_classes=num_classes,
+                      default_cfgs={'architecture': 'convnext_base_in22k'}, **kwargs)
     model = _create_convnext('convnext_base_in22k', pretrained=pretrained, **model_args)
     return model
 
 
 @register_model
-def convnext_large_in22k(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536], **kwargs)
+def convnext_large_in22k(pretrained=False, num_classes=1000, **kwargs):
+    model_args = dict(depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536], num_classes=num_classes,
+                      default_cfgs={'architecture': 'convnext_large_in22k'}, **kwargs)
     model = _create_convnext('convnext_large_in22k', pretrained=pretrained, **model_args)
     return model
 
 
 @register_model
-def convnext_xlarge_in22k(pretrained=False, **kwargs):
-    model_args = dict(depths=[3, 3, 27, 3], dims=[256, 512, 1024, 2048], **kwargs)
+def convnext_xlarge_in22k(pretrained=False, num_classes=1000, **kwargs):
+    model_args = dict(depths=[3, 3, 27, 3], dims=[256, 512, 1024, 2048], num_classes=num_classes,
+                      default_cfgs={'architecture': 'convnext_xlarge_in22k'}, **kwargs)
     model = _create_convnext('convnext_xlarge_in22k', pretrained=pretrained, **model_args)
     return model
